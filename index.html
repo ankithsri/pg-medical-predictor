@@ -141,12 +141,32 @@ button.primary:active{transform:scale(0.98);}
 .msActions button:hover{border-color:var(--gold);}
 .msOptions{max-height:220px; overflow-y:auto;}
 .msOption{
-  display:flex; align-items:center; gap:8px; padding:6px 4px; border-radius:5px;
+  display:flex; align-items:flex-start; gap:8px; padding:8px 4px; border-radius:5px;
   font-size:13px; cursor:pointer;
 }
 .msOption:hover{background:var(--mute-bg);}
-.msOption input{accent-color:var(--gold); flex:none;}
-.msOption span{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.msOption input{accent-color:var(--gold); flex:none; margin-top:3px;}
+.msOption span{overflow-wrap:anywhere; word-break:break-word; white-space:normal; line-height:1.35;}
+.msPanelHead{display:none; align-items:center; justify-content:space-between; margin-bottom:8px;}
+.msPanelHead .msTitle{font-size:14px; font-weight:600;}
+.msPanelHead button{
+  background:var(--mute-bg); border:1px solid var(--line); color:var(--ink);
+  border-radius:5px; padding:5px 10px; font:inherit; font-size:12px; cursor:pointer;
+}
+.msBackdrop{display:none;}
+
+@media (max-width:640px){
+  .msPanel{
+    position:fixed; left:12px; right:12px; bottom:12px; top:auto;
+    width:auto; max-width:none; max-height:70vh;
+    padding:14px; z-index:101;
+  }
+  .msPanelHead{display:flex;}
+  .msOptions{max-height:calc(70vh - 130px);}
+  .msBackdrop.open{
+    display:block; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:100;
+  }
+}
 .msEmpty{font-size:12.5px; color:var(--ink-soft); padding:8px 4px;}
 .msChips{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
 .msChip{
@@ -186,6 +206,8 @@ footer a{color:var(--ink-soft);}
   <h1>PG Medical Seat Predictor</h1>
   <p class="sub">Enter your category and rank to see which KNRUHS-affiliated colleges and branches you could realistically get, based on last cycle's actual counselling data (AY 2025-26, all four rounds).</p>
 </header>
+<div class="msBackdrop" id="msBackdrop"></div>
+
 <main>
 
   <div class="tabs">
@@ -502,6 +524,42 @@ function renderChips(){
   });
 }
 
+function ensurePanelHead(type){
+  const panel = document.getElementById('msPanel-' + type);
+  if(!panel || panel.querySelector('.msPanelHead')) return;
+  const head = document.createElement('div');
+  head.className = 'msPanelHead';
+  const title = document.createElement('span');
+  title.className = 'msTitle';
+  title.textContent = type.startsWith('college') ? 'Select colleges' : 'Select branches';
+  const done = document.createElement('button');
+  done.type = 'button';
+  done.textContent = 'Done';
+  done.addEventListener('click', closeAllMS);
+  head.appendChild(title);
+  head.appendChild(done);
+  panel.insertBefore(head, panel.firstChild);
+}
+
+function syncBackdrop(){
+  const anyOpen = MS_TYPES.some(t=>{
+    const p = document.getElementById('msPanel-' + t);
+    return p && p.classList.contains('open');
+  });
+  const backdrop = document.getElementById('msBackdrop');
+  if(backdrop) backdrop.classList.toggle('open', anyOpen);
+}
+
+function closeAllMS(){
+  MS_TYPES.forEach(t=>{
+    const panel = document.getElementById('msPanel-' + t);
+    const btn = document.getElementById('msBtn-' + t);
+    if(panel) panel.classList.remove('open');
+    if(btn) btn.classList.remove('active');
+  });
+  syncBackdrop();
+}
+
 function toggleMS(type){
   MS_TYPES.forEach(t=>{
     const panel = document.getElementById('msPanel-' + t);
@@ -511,15 +569,19 @@ function toggleMS(type){
       const opening = !panel.classList.contains('open');
       panel.classList.toggle('open', opening);
       btn.classList.toggle('active', opening);
-      if(opening) buildMSOptions(t);
+      if(opening){ ensurePanelHead(t); buildMSOptions(t); }
     } else {
       panel.classList.remove('open');
       btn.classList.remove('active');
     }
   });
+  syncBackdrop();
 }
 
+document.getElementById('msBackdrop').addEventListener('click', closeAllMS);
+
 document.addEventListener('click', (e)=>{
+  if(e.target.id === 'msBackdrop') return;
   MS_TYPES.forEach(t=>{
     const wrap = document.getElementById('msWrap-' + t);
     if(wrap && !wrap.contains(e.target)){
@@ -527,6 +589,7 @@ document.addEventListener('click', (e)=>{
       document.getElementById('msBtn-' + t).classList.remove('active');
     }
   });
+  syncBackdrop();
 });
 
 function switchTab(name){
