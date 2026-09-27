@@ -42,67 +42,142 @@ body{
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
 header{
-  border-bottom:1px solid var(--line); padding:28px 20px 22px;
-  max-width:980px; margin:0 auto;
+  border-bottom:1px solid var(--line); padding:32px 20px 24px;
+  max-width:1040px; margin:0 auto;
 }
 h1{
   font-family:'Source Serif 4',serif; font-weight:700;
-  font-size:clamp(26px,4vw,36px); margin:0 0 6px; letter-spacing:-0.01em;
+  font-size:clamp(26px,4vw,36px); margin:0 0 8px; letter-spacing:-0.01em;
 }
-.sub{color:var(--ink-soft); font-size:15px; max-width:62ch; line-height:1.5; margin:0;}
-main{max-width:980px; margin:0 auto; padding:24px 20px 60px;}
+.sub{color:var(--ink-soft); font-size:15px; max-width:66ch; line-height:1.55; margin:0;}
+main{max-width:1040px; margin:0 auto; padding:26px 20px 60px;}
+
+.tabs{display:flex; gap:6px; margin-bottom:20px; border-bottom:1px solid var(--line);}
+.tabBtn{
+  background:none; border:none; font:inherit; font-size:14.5px; font-weight:500;
+  color:var(--ink-soft); padding:10px 4px; margin-right:18px; cursor:pointer;
+  border-bottom:2px solid transparent; transition:color .15s ease, border-color .15s ease;
+}
+.tabBtn:hover{color:var(--ink);}
+.tabBtn.active{color:var(--ink); border-bottom-color:var(--gold);}
 
 .panel{
-  background:var(--panel); border:1px solid var(--line); border-radius:6px;
-  padding:22px; margin-bottom:22px;
+  background:var(--panel); border:1px solid var(--line); border-radius:10px;
+  padding:24px; margin-bottom:22px;
+  box-shadow:0 1px 2px rgba(0,0,0,0.03), 0 8px 24px -16px rgba(0,0,0,0.12);
 }
 .panel h2{
   font-family:'Source Serif 4',serif; font-size:19px; margin:0 0 16px; font-weight:600;
 }
 .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px 16px;}
-label{display:block; font-size:12.5px; color:var(--ink-soft); margin-bottom:5px;}
+label{display:block; font-size:12.5px; color:var(--ink-soft); margin-bottom:5px; font-weight:500;}
 select,input[type=number],input[type=text]{
-  width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:4px;
+  width:100%; padding:10px 11px; border:1px solid var(--line); border-radius:6px;
   background:var(--panel); color:var(--ink); font:inherit; font-size:14px;
+  transition:border-color .15s ease, box-shadow .15s ease;
+}
+select:focus,input[type=number]:focus,input[type=text]:focus{
+  outline:none; border-color:var(--gold); box-shadow:0 0 0 3px color-mix(in srgb, var(--gold) 18%, transparent);
 }
 .check-row{display:flex; align-items:center; gap:8px; margin-top:2px;}
-.check-row input{width:auto;}
+.check-row input{width:auto; accent-color:var(--gold);}
 .check-row label{margin:0; color:var(--ink); font-size:13.5px;}
-.actions{margin-top:18px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+.actions{margin-top:20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
 button.primary{
-  background:var(--ink); color:var(--paper); border:none; border-radius:4px;
-  padding:11px 22px; font:inherit; font-size:14.5px; font-weight:500; cursor:pointer;
+  background:var(--ink); color:var(--paper); border:none; border-radius:6px;
+  padding:11px 24px; font:inherit; font-size:14.5px; font-weight:500; cursor:pointer;
+  transition:opacity .15s ease, transform .1s ease;
 }
 button.primary:hover{opacity:0.88;}
+button.primary:active{transform:scale(0.98);}
 .hint{font-size:12.5px; color:var(--ink-soft);}
 
 #resultsWrap{display:none;}
+.statrow{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:16px;}
+.statcard{
+  background:var(--panel); border:1px solid var(--line); border-radius:10px;
+  padding:14px 16px;
+}
+.statcard .n{font-family:'Source Serif 4',serif; font-size:24px; font-weight:700; color:var(--gold); line-height:1.1;}
+.statcard .l{font-size:12px; color:var(--ink-soft); margin-top:4px;}
 .summary{
-  font-size:15px; margin-bottom:16px; padding:14px 16px; border-radius:5px;
+  font-size:15px; margin-bottom:16px; padding:14px 16px; border-radius:8px;
   background:var(--mute-bg); color:var(--ink);
 }
 .summary b{color:var(--gold);}
-.filters{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px;}
+.filters{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; align-items:flex-start;}
 .filters input, .filters select{width:auto; min-width:180px;}
-.toggle{display:flex; align-items:center; gap:6px; font-size:13px; color:var(--ink-soft);}
+.toggle{display:flex; align-items:center; gap:6px; font-size:13px; color:var(--ink-soft); padding:10px 2px;}
+.toggle input{accent-color:var(--gold);}
+
+/* Multi-select dropdown */
+.msWrap{position:relative;}
+.msBtn{
+  display:flex; align-items:center; gap:8px; min-width:200px; justify-content:space-between;
+  padding:10px 12px; border:1px solid var(--line); border-radius:6px;
+  background:var(--panel); color:var(--ink); font:inherit; font-size:14px; cursor:pointer;
+  transition:border-color .15s ease;
+}
+.msBtn:hover{border-color:var(--gold);}
+.msBtn.active{border-color:var(--gold); box-shadow:0 0 0 3px color-mix(in srgb, var(--gold) 18%, transparent);}
+.msChevron{color:var(--ink-soft); font-size:11px; transition:transform .15s ease;}
+.msBtn.active .msChevron{transform:rotate(180deg);}
+.msCount{
+  background:var(--gold); color:#fff; border-radius:20px; font-size:11px; font-weight:600;
+  padding:1px 7px; margin-left:2px;
+}
+.msPanel{
+  display:none; position:absolute; top:calc(100% + 6px); left:0; z-index:20;
+  width:300px; max-width:80vw; background:var(--panel); border:1px solid var(--line);
+  border-radius:8px; box-shadow:0 12px 32px -8px rgba(0,0,0,0.25); padding:10px;
+}
+.msPanel.open{display:block;}
+.msSearch{margin-bottom:8px;}
+.msActions{display:flex; gap:8px; margin-bottom:8px;}
+.msActions button{
+  flex:1; background:var(--mute-bg); border:1px solid var(--line); color:var(--ink);
+  border-radius:5px; padding:6px 8px; font:inherit; font-size:12px; cursor:pointer;
+}
+.msActions button:hover{border-color:var(--gold);}
+.msOptions{max-height:220px; overflow-y:auto;}
+.msOption{
+  display:flex; align-items:center; gap:8px; padding:6px 4px; border-radius:5px;
+  font-size:13px; cursor:pointer;
+}
+.msOption:hover{background:var(--mute-bg);}
+.msOption input{accent-color:var(--gold); flex:none;}
+.msOption span{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.msEmpty{font-size:12.5px; color:var(--ink-soft); padding:8px 4px;}
+.msChips{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+.msChip{
+  display:flex; align-items:center; gap:5px; background:var(--mute-bg); border:1px solid var(--line);
+  border-radius:20px; padding:3px 6px 3px 10px; font-size:11.5px; color:var(--ink);
+}
+.msChip button{
+  border:none; background:none; color:var(--ink-soft); cursor:pointer; font-size:13px;
+  line-height:1; padding:2px; border-radius:50%;
+}
+.msChip button:hover{color:var(--bad-fg); background:var(--bad-bg);}
 
 table{width:100%; border-collapse:collapse; font-size:13.5px;}
 thead th{
-  text-align:left; padding:9px 10px; border-bottom:2px solid var(--line);
+  text-align:left; padding:10px 10px; border-bottom:2px solid var(--line);
   font-size:12px; color:var(--ink-soft); font-weight:600; cursor:pointer; white-space:nowrap;
+  user-select:none;
 }
-thead th:hover{color:var(--ink);}
-tbody td{padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top;}
+thead th:hover{color:var(--ink); background:var(--mute-bg);}
+tbody td{padding:10px 10px; border-bottom:1px solid var(--line); vertical-align:top;}
 tbody tr:hover{background:var(--mute-bg);}
 .tag{
-  display:inline-block; padding:2px 8px; border-radius:20px; font-size:12px; font-weight:500;
+  display:inline-block; padding:2px 9px; border-radius:20px; font-size:12px; font-weight:500;
 }
 .tag.good{background:var(--good-bg); color:var(--good-fg);}
 .tag.bad{background:var(--bad-bg); color:var(--bad-fg);}
 .tag.mute{background:var(--mute-bg); color:var(--mute-fg);}
 .via{font-size:12px; color:var(--ink-soft);}
-.tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:6px;}
-footer{max-width:980px; margin:0 auto; padding:0 20px 50px; color:var(--ink-soft); font-size:12.5px; line-height:1.6;}
+.tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:10px; box-shadow:0 1px 2px rgba(0,0,0,0.03), 0 8px 24px -16px rgba(0,0,0,0.12);}
+.noresults{padding:32px 16px; text-align:center; color:var(--ink-soft); font-size:13.5px;}
+footer{max-width:1040px; margin:0 auto; padding:0 20px 50px; color:var(--ink-soft); font-size:12.5px; line-height:1.6;}
 footer a{color:var(--ink-soft);}
 </style>
 </head>
@@ -113,6 +188,12 @@ footer a{color:var(--ink-soft);}
 </header>
 <main>
 
+  <div class="tabs">
+    <button type="button" class="tabBtn active" id="tabBtn-predictor" onclick="switchTab('predictor')">College Predictor</button>
+    <button type="button" class="tabBtn" id="tabBtn-cutoffs" onclick="switchTab('cutoffs')">Cutoff Explorer</button>
+  </div>
+
+  <div id="tab-predictor">
   <div class="panel">
     <h2>Your details</h2>
     <div class="grid">
@@ -156,12 +237,40 @@ footer a{color:var(--ink-soft);}
   </div>
 
   <div id="resultsWrap">
+    <div class="statrow" id="statrow"></div>
     <div class="summary" id="summary"></div>
     <div class="filters">
-      <input type="text" id="fCollege" placeholder="Filter by college…" oninput="renderTable()">
-      <input type="text" id="fCourse" placeholder="Filter by branch…" oninput="renderTable()">
+      <div class="msWrap" id="msWrap-college">
+        <button type="button" class="msBtn" id="msBtn-college" onclick="toggleMS('college')">
+          <span id="msLabel-college">All colleges</span>
+          <span class="msChevron">▾</span>
+        </button>
+        <div class="msPanel" id="msPanel-college">
+          <input type="text" class="msSearch" placeholder="Search colleges…" oninput="filterMSOptions('college', this.value)">
+          <div class="msActions">
+            <button type="button" onclick="msSelectAll('college')">Select all</button>
+            <button type="button" onclick="msClear('college')">Clear</button>
+          </div>
+          <div class="msOptions" id="msOptions-college"></div>
+        </div>
+      </div>
+      <div class="msWrap" id="msWrap-course">
+        <button type="button" class="msBtn" id="msBtn-course" onclick="toggleMS('course')">
+          <span id="msLabel-course">All branches</span>
+          <span class="msChevron">▾</span>
+        </button>
+        <div class="msPanel" id="msPanel-course">
+          <input type="text" class="msSearch" placeholder="Search branches…" oninput="filterMSOptions('course', this.value)">
+          <div class="msActions">
+            <button type="button" onclick="msSelectAll('course')">Select all</button>
+            <button type="button" onclick="msClear('course')">Clear</button>
+          </div>
+          <div class="msOptions" id="msOptions-course"></div>
+        </div>
+      </div>
       <label class="toggle"><input type="checkbox" id="onlyEligible" checked onchange="renderTable()"> Show only branches I likely qualify for</label>
     </div>
+    <div class="msChips" id="msChips"></div>
     <div class="tablewrap">
       <table>
         <thead>
@@ -175,6 +284,93 @@ footer a{color:var(--ink-soft);}
         </thead>
         <tbody id="tbody"></tbody>
       </table>
+    </div>
+  </div>
+  </div>
+
+  <div id="tab-cutoffs" style="display:none;">
+    <div class="panel">
+      <h2>Look up last cutoff rank</h2>
+      <p class="hint" style="margin:-8px 0 16px;">Pick a category, then optionally narrow by college and/or branch. Leave college/branch empty to browse everything. Results cover every recorded round.</p>
+      <div class="grid">
+        <div>
+          <label for="catC">Category</label>
+          <select id="catC">
+            <option value="OC">OC (Open / Unreserved)</option>
+            <option value="BCA">BC-A</option>
+            <option value="BCB">BC-B</option>
+            <option value="BCC">BC-C</option>
+            <option value="BCD">BC-D</option>
+            <option value="BCE">BC-E</option>
+            <option value="SC1">SC</option>
+            <option value="ST">ST</option>
+          </select>
+        </div>
+        <div>
+          <label for="sexC">Gender</label>
+          <select id="sexC">
+            <option value="F">Female</option>
+            <option value="M">Male</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid" style="margin-top:14px;">
+        <div class="check-row"><input type="checkbox" id="minC"><label for="minC">Include Minority (MIN) quota</label></div>
+      </div>
+      <div class="filters" style="margin-top:16px;">
+        <div class="msWrap" id="msWrap-collegeC">
+          <button type="button" class="msBtn" id="msBtn-collegeC" onclick="toggleMS('collegeC')">
+            <span id="msLabel-collegeC">All colleges</span>
+            <span class="msChevron">▾</span>
+          </button>
+          <div class="msPanel" id="msPanel-collegeC">
+            <input type="text" class="msSearch" placeholder="Search colleges…" oninput="filterMSOptions('collegeC', this.value)">
+            <div class="msActions">
+              <button type="button" onclick="msSelectAll('collegeC')">Select all</button>
+              <button type="button" onclick="msClear('collegeC')">Clear</button>
+            </div>
+            <div class="msOptions" id="msOptions-collegeC"></div>
+          </div>
+        </div>
+        <div class="msWrap" id="msWrap-courseC">
+          <button type="button" class="msBtn" id="msBtn-courseC" onclick="toggleMS('courseC')">
+            <span id="msLabel-courseC">All branches</span>
+            <span class="msChevron">▾</span>
+          </button>
+          <div class="msPanel" id="msPanel-courseC">
+            <input type="text" class="msSearch" placeholder="Search branches…" oninput="filterMSOptions('courseC', this.value)">
+            <div class="msActions">
+              <button type="button" onclick="msSelectAll('courseC')">Select all</button>
+              <button type="button" onclick="msClear('courseC')">Clear</button>
+            </div>
+            <div class="msOptions" id="msOptions-courseC"></div>
+          </div>
+        </div>
+      </div>
+      <div class="msChips" id="msChipsC"></div>
+      <div class="actions">
+        <button class="primary" onclick="computeCutoffs()">Show cutoffs</button>
+        <span class="hint">Shows the last rank admitted each round under OPEN, your selected category, and (if ticked) MIN.</span>
+      </div>
+    </div>
+
+    <div id="cutoffResultsWrap" style="display:none;">
+      <div class="summary" id="cutoffSummary"></div>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortBy2('college')">College</th>
+              <th onclick="sortBy2('course')">Branch</th>
+              <th onclick="sortBy2('round')">Round</th>
+              <th onclick="sortBy2('nonLocal')">Non-local rank</th>
+              <th onclick="sortBy2('local')">Local (MRC) rank</th>
+              <th>Via quota</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyC"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -196,6 +392,150 @@ Object.keys(DATA.roundLabels).sort().forEach(r=>{
 
 let rows = [];
 let sortState = {key:'college', dir:1};
+let cutoffRows = [];
+let sortState2 = {key:'college', dir:1};
+
+/* ---------- Multi-select dropdown (college / course) ---------- */
+const msState = {
+  college:  {all: DATA.colleges.slice().sort(), selected: new Set(), query: ''},
+  course:   {all: DATA.courses.slice().sort(),  selected: new Set(), query: ''},
+  collegeC: {all: DATA.colleges.slice().sort(), selected: new Set(), query: ''},
+  courseC:  {all: DATA.courses.slice().sort(),  selected: new Set(), query: ''}
+};
+
+function buildMSOptions(type){
+  const st = msState[type];
+  const q = st.query.trim().toLowerCase();
+  const list = st.all.filter(v => !q || v.toLowerCase().includes(q));
+  const box = document.getElementById('msOptions-' + type);
+  box.innerHTML = '';
+  if(!list.length){ box.innerHTML = '<div class="msEmpty">No matches.</div>'; return; }
+  const frag = document.createDocumentFragment();
+  list.forEach(v=>{
+    const wrap = document.createElement('label');
+    wrap.className = 'msOption';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = st.selected.has(v);
+    cb.addEventListener('change', function(){ msToggle(type, cb.checked, v); });
+    const span = document.createElement('span');
+    span.textContent = v;
+    wrap.appendChild(cb);
+    wrap.appendChild(span);
+    frag.appendChild(wrap);
+  });
+  box.appendChild(frag);
+}
+
+function msToggle(type, isChecked, value){
+  const st = msState[type];
+  if(isChecked) st.selected.add(value); else st.selected.delete(value);
+  updateMSLabel(type);
+  renderChips();
+  renderTable();
+}
+
+function msSelectAll(type){
+  const st = msState[type];
+  const q = st.query.trim().toLowerCase();
+  const visible = st.all.filter(v => !q || v.toLowerCase().includes(q));
+  visible.forEach(v=>st.selected.add(v));
+  buildMSOptions(type); updateMSLabel(type); renderChips(); renderTable();
+}
+
+function msClear(type){
+  msState[type].selected.clear();
+  buildMSOptions(type); updateMSLabel(type); renderChips(); renderTable();
+}
+
+function msRemove(type, value){
+  msState[type].selected.delete(value);
+  buildMSOptions(type); updateMSLabel(type); renderChips(); renderTable();
+}
+
+function filterMSOptions(type, query){
+  msState[type].query = query;
+  buildMSOptions(type);
+}
+
+function updateMSLabel(type){
+  const st = msState[type];
+  const label = document.getElementById('msLabel-' + type);
+  const isCollege = type.startsWith('college');
+  const noun = isCollege ? 'college' : 'branch';
+  const nounAll = isCollege ? 'All colleges' : 'All branches';
+  if(st.selected.size === 0){ label.textContent = nounAll; return; }
+  if(st.selected.size === 1){ label.textContent = [...st.selected][0]; return; }
+  label.textContent = `${st.selected.size} ${noun}s selected`;
+}
+
+const MS_TYPES = ['college','course','collegeC','courseC'];
+const MS_CHIP_GROUPS = {college:'msChips', course:'msChips', collegeC:'msChipsC', courseC:'msChipsC'};
+
+function renderChips(){
+  const groups = {};
+  MS_TYPES.forEach(type=>{
+    msState[type].selected.forEach(v=>{
+      const boxId = MS_CHIP_GROUPS[type];
+      (groups[boxId] = groups[boxId] || []).push({type, v});
+    });
+  });
+  ['msChips','msChipsC'].forEach(boxId=>{
+    const box = document.getElementById(boxId);
+    if(!box) return;
+    box.innerHTML = '';
+    const entries = groups[boxId] || [];
+    const frag = document.createDocumentFragment();
+    entries.forEach(e=>{
+      const chip = document.createElement('span');
+      chip.className = 'msChip';
+      chip.appendChild(document.createTextNode(e.v));
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('aria-label','Remove');
+      btn.textContent = '×';
+      btn.addEventListener('click', function(){ msRemove(e.type, e.v); });
+      chip.appendChild(btn);
+      frag.appendChild(chip);
+    });
+    box.appendChild(frag);
+  });
+}
+
+function toggleMS(type){
+  MS_TYPES.forEach(t=>{
+    const panel = document.getElementById('msPanel-' + t);
+    const btn = document.getElementById('msBtn-' + t);
+    if(!panel || !btn) return;
+    if(t === type){
+      const opening = !panel.classList.contains('open');
+      panel.classList.toggle('open', opening);
+      btn.classList.toggle('active', opening);
+      if(opening) buildMSOptions(t);
+    } else {
+      panel.classList.remove('open');
+      btn.classList.remove('active');
+    }
+  });
+}
+
+document.addEventListener('click', (e)=>{
+  MS_TYPES.forEach(t=>{
+    const wrap = document.getElementById('msWrap-' + t);
+    if(wrap && !wrap.contains(e.target)){
+      document.getElementById('msPanel-' + t).classList.remove('open');
+      document.getElementById('msBtn-' + t).classList.remove('active');
+    }
+  });
+});
+
+function switchTab(name){
+  const isPredictor = name === 'predictor';
+  document.getElementById('tab-predictor').style.display = isPredictor ? '' : 'none';
+  document.getElementById('tab-cutoffs').style.display = isPredictor ? 'none' : '';
+  document.getElementById('tabBtn-predictor').classList.toggle('active', isPredictor);
+  document.getElementById('tabBtn-cutoffs').classList.toggle('active', !isPredictor);
+}
 
 function effectiveCutoff(bucket, sex){
   if(!bucket) return undefined;
@@ -254,14 +594,95 @@ function sortBy(key){
   renderTable();
 }
 
+function sortBy2(key){
+  if(sortState2.key===key) sortState2.dir*=-1; else {sortState2.key=key; sortState2.dir=1;}
+  renderCutoffTable();
+}
+
+function computeCutoffs(){
+  const cat = document.getElementById('catC').value;
+  const sex = document.getElementById('sexC').value;
+  const minOn = document.getElementById('minC').checked;
+  const selCollege = msState.collegeC.selected;
+  const selCourse = msState.courseC.selected;
+
+  const quotasToCheck = ['OPEN'];
+  if(cat!=='OC') quotasToCheck.push(cat);
+  if(minOn) quotasToCheck.push('MIN');
+
+  cutoffRows = [];
+  DATA.data.forEach(d=>{
+    const collegeName = DATA.colleges[d.c];
+    const courseName = DATA.courses[d.k];
+    if(selCollege.size && !selCollege.has(collegeName)) return;
+    if(selCourse.size && !selCourse.has(courseName)) return;
+
+    let nonLocal, local; const viaSet = new Set();
+    quotasToCheck.forEach(q=>{
+      const qd = d.q[q];
+      if(!qd) return;
+      const n = effectiveCutoff(qd.n, sex);
+      if(n!==undefined){ if(nonLocal===undefined || n>nonLocal) nonLocal=n; viaSet.add(q); }
+      const y = effectiveCutoff(qd.y, sex);
+      if(y!==undefined){ if(local===undefined || y>local) local=y; viaSet.add(q+'-Local'); }
+    });
+    if(nonLocal===undefined && local===undefined) return;
+
+    cutoffRows.push({
+      college: collegeName, course: courseName, round: d.r,
+      nonLocal, local, via: [...viaSet].join(', ')
+    });
+  });
+
+  document.getElementById('cutoffResultsWrap').style.display = 'block';
+  sortState2 = {key:'college', dir:1};
+  renderCutoffTable();
+}
+
+function renderCutoffTable(){
+  const shown = cutoffRows.slice().sort((a,b)=>{
+    const k = sortState2.key;
+    let av=a[k], bv=b[k];
+    if(k==='nonLocal' || k==='local' || k==='round'){
+      av = av===undefined?-1:av; bv = bv===undefined?-1:bv;
+    } else {
+      av=String(av); bv=String(bv);
+    }
+    if(av<bv) return -1*sortState2.dir;
+    if(av>bv) return 1*sortState2.dir;
+    return 0;
+  });
+
+  const collegeCount = new Set(cutoffRows.map(r=>r.college)).size;
+  document.getElementById('cutoffSummary').innerHTML =
+    `Found <b>${cutoffRows.length}</b> college/branch/round records across <b>${collegeCount}</b> college${collegeCount===1?'':'s'} matching your filters.`;
+
+  const tbody = document.getElementById('tbodyC');
+  if(!shown.length){
+    tbody.innerHTML = `<tr><td colspan="6"><div class="noresults">No cutoff data matches your filters. Try widening the category, college or branch selection.</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = shown.map(r=>{
+    const roundLabel = DATA.roundLabels[String(r.round)] || ('Round ' + r.round);
+    return `<tr>
+      <td>${r.college}</td>
+      <td>${r.course}</td>
+      <td>${roundLabel}</td>
+      <td>${r.nonLocal!==undefined ? r.nonLocal : '—'}</td>
+      <td>${r.local!==undefined ? r.local : '—'}</td>
+      <td class="via">${r.via||'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
 function renderTable(){
-  const fc = document.getElementById('fCollege').value.toLowerCase();
-  const fk = document.getElementById('fCourse').value.toLowerCase();
+  const selCollege = msState.college.selected;
+  const selCourse = msState.course.selected;
   const onlyElig = document.getElementById('onlyEligible').checked;
 
   let shown = rows.filter(r=>
-    r.college.toLowerCase().includes(fc) &&
-    r.course.toLowerCase().includes(fk) &&
+    (selCollege.size===0 || selCollege.has(r.college)) &&
+    (selCourse.size===0 || selCourse.has(r.course)) &&
     (!onlyElig || r.elig==='good')
   );
 
@@ -276,10 +697,22 @@ function renderTable(){
   });
 
   const eligCount = rows.filter(r=>r.elig==='good').length;
+  const collegeCount = new Set(rows.filter(r=>r.elig==='good').map(r=>r.college)).size;
+
+  document.getElementById('statrow').innerHTML = `
+    <div class="statcard"><div class="n">${eligCount}</div><div class="l">Branches you likely qualify for</div></div>
+    <div class="statcard"><div class="n">${collegeCount}</div><div class="l">Colleges with an eligible branch</div></div>
+    <div class="statcard"><div class="n">${rows.length}</div><div class="l">Total branches with recorded data</div></div>
+  `;
+
   document.getElementById('summary').innerHTML =
     `You likely qualify for <b>${eligCount}</b> of <b>${rows.length}</b> branches with recorded data this round.`;
 
   const tbody = document.getElementById('tbody');
+  if(!shown.length){
+    tbody.innerHTML = `<tr><td colspan="5"><div class="noresults">No branches match your current filters. Try clearing a filter above.</div></td></tr>`;
+    return;
+  }
   tbody.innerHTML = shown.map(r=>{
     const tag = r.elig==='good' ? '<span class="tag good">Likely</span>'
               : r.elig==='bad' ? '<span class="tag bad">Unlikely</span>'
